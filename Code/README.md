@@ -1,4 +1,4 @@
-# Dandelion vs. Spy · Source code
+# Dandelion Spy Simulator · Source code
 
 See the [project README](../README.md) for installation, architecture, experiments, results, and report generation.
 
