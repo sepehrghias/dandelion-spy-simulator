@@ -1,0 +1,71 @@
+######################################################################
+# اجرای کامل شبیه‌سازی «قاصدک در برابر جاسوس»
+# بذرهای آزمایش: [1, 2, 3, 4, 5]
+######################################################################
+
+=== فاز ۰: تولید توپولوژی و بررسی همبندی ===
+  N=25, clusters=5, edges=42, attempts=1
+  degree min/mean/max = 2/3.36/5
+  connected=True  valid=True
+    cluster 0: size=4, external independent links=2
+    cluster 1: size=5, external independent links=3
+    cluster 2: size=3, external independent links=5
+    cluster 3: size=4, external independent links=2
+    cluster 4: size=4, external independent links=2
+  spy set (betweenness, 7 nodes) = [3, 5, 9, 11, 15, 23, 24]
+    → CSV: results\topology_clusters.csv
+
+=== فاز ۱: پخش عمومی پایه (Base Diffusion) ===
+  seed=1: coverage=1.000 reach80=1.00 T80=1.130s
+  seed=2: coverage=1.000 reach80=1.00 T80=1.270s
+  seed=3: coverage=1.000 reach80=1.00 T80=1.460s
+  seed=4: coverage=1.000 reach80=1.00 T80=1.237s
+  seed=5: coverage=1.000 reach80=1.00 T80=1.446s
+    → CSV: results\phase1_diffusion.csv
+    → figure: figures\phase1_coverage_curve.png
+
+=== فاز ۲: حمله به پخش عمومی + پویش تعداد جاسوس ===
+  seed=1 پویش کامل شد (n=1..7)
+  seed=2 پویش کامل شد (n=1..8)
+  seed=3 پویش کامل شد (n=1..8)
+  seed=4 پویش کامل شد (n=1..8)
+  seed=5 پویش کامل شد (n=1..8)
+    → CSV: results\phase2_spy_sweep.csv
+  تعداد بهینهٔ جاسوس (بیشینهٔ Score_adv پیشنهادی): n* = 1
+    → figure: figures\phase2_spy_sweep.png
+
+=== فاز ۳: پروتکل Dandelion و پویش پارامتر p (رفتار شبکه) ===
+  p=0.9: T80 mean=1.818s median=1.977s std=0.239  reach80 mean=0.28
+  p=0.5: T80 mean=1.666s median=1.786s std=0.200  reach80 mean=0.81
+  p=0.1: T80 mean=1.533s median=1.574s std=0.144  reach80 mean=0.95
+    → CSV: results\phase3_dandelion_raw.csv
+    → CSV: results\phase3_dandelion_stats.csv
+    → figure: figures\phase3_psweep.png
+
+=== فاز ۴: حملهٔ پیشرفته به Dandelion (سه مقدار p) ===
+  p=0.9: baseline=0.217  proposed=0.263 (±0.054)  Δ=+0.046
+  p=0.5: baseline=0.230  proposed=0.374 (±0.085)  Δ=+0.144
+  p=0.1: baseline=0.229  proposed=0.474 (±0.100)  Δ=+0.245
+    → CSV: results\phase4_attack_raw.csv
+    → CSV: results\phase4_attack_stats.csv
+    → figure: figures\phase4_attack.png
+
+=== فاز ۵: تأخیر عمدی جاسوس‌ها ===
+  p=0.9 policy=none : acc=0.263  T80=1.818s
+  p=0.9 policy=max  : acc=0.281  T80=2.769s
+  p=0.5 policy=none : acc=0.374  T80=1.666s
+  p=0.5 policy=max  : acc=0.384  T80=2.545s
+  p=0.1 policy=none : acc=0.474  T80=1.533s
+  p=0.1 policy=max  : acc=0.476  T80=2.397s
+    → CSV: results\phase5_delay_raw.csv
+    → CSV: results\phase5_delay_stats.csv
+    → figure: figures\phase5_delay.png
+
+=== خلاصهٔ نهایی امتیازها ===
+    → CSV: results\summary_scores.csv
+  2 (diffusion)    p=-     acc=0.466  Score_adv=0.0583  T80=1.308s  Score_honest=0.4081
+  4 (dandelion)    p=0.9   acc=0.261  Score_adv=0.0326  T80=1.818s  Score_honest=0.4064
+  4 (dandelion)    p=0.5   acc=0.381  Score_adv=0.0476  T80=1.666s  Score_honest=0.3716
+  4 (dandelion)    p=0.1   acc=0.466  Score_adv=0.0583  T80=1.533s  Score_honest=0.3484
+
+>>> پایان. خروجی‌ها در results/ و figures/ ذخیره شدند.

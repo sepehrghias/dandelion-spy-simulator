@@ -1,0 +1,7 @@
+# Dependencies for the "Dandelion vs. Spy" project.
+# Only two scientific dependencies; the graph algorithms (connectivity, Dijkstra,
+# Brandes) and the UDP network are implemented without any external library.
+numpy>=1.24
+matplotlib>=3.6
+# Python standard library used: asyncio, threading, socket, heapq, csv, uuid ...
+# Recommended Python version: 3.10+
